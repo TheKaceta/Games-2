@@ -1,0 +1,50 @@
+function Draw-ProgressBar {
+    param (
+        [int]$PercentComplete
+    )
+
+    $ProgressBarLength = 20
+    $CompletedLength = [math]::Ceiling(($PercentComplete / 100) * $ProgressBarLength)
+    $RemainingLength = $ProgressBarLength - $CompletedLength
+
+    $ProgressBar = "[" + "█" * $CompletedLength + "▒" * $RemainingLength + "] $PercentComplete%"
+    Write-Host $ProgressBar -NoNewline
+    Write-Host "`r" -NoNewline # Move o cursor para o início da linha
+}
+
+$url = "https://download1325.mediafire.com/kc8aqo0nbkxgjBrF8sZOPKSJ81ezOFzCrNzWIltHMRRZDD7Gsmvx5z4V0jpiSnSupITr6IoZG5bxDJXH2Dne2kCHiuYt6umwnITGnARhQvRczWlIMPAs2aY47c1ClRBB-BdbrHuPyNtg7Rz_dHAjzQFj5zAMDIdzXsTNiznqzFxBN5M/n83ni66lrk0t74j/DATA+LINDA+V25+COM+ENB.rar"
+$outputFile = "$env:USERPROFILE\Downloads\DATA LINDA V25 COM ENB.rar"
+
+$webRequest = [System.Net.WebRequest]::Create($url)
+$response = $webRequest.GetResponse()
+$fileSize = [int]$response.ContentLength
+$responseStream = $response.GetResponseStream()
+$fileStream = [System.IO.File]::Create($outputFile)
+
+$buffer = New-Object byte[] 1024
+$totalBytesRead = 0
+$bytesRead = 0
+$lastPercentComplete = -1
+$progressStarted = $false
+
+while (($bytesRead = $responseStream.Read($buffer, 0, $buffer.Length)) -gt 0) {
+    if (!$progressStarted) {
+        $progressStarted = $true
+        Write-Host "Downloading..." -NoNewline
+    }
+    $fileStream.Write($buffer, 0, $bytesRead)
+    $totalBytesRead += $bytesRead
+    $percentComplete = [int](($totalBytesRead / $fileSize) * 100)
+    if ($percentComplete -ne $lastPercentComplete) {
+        $lastPercentComplete = $percentComplete
+        Draw-ProgressBar -PercentComplete $percentComplete
+    }
+}
+
+$fileStream.Close()
+$responseStream.Close()
+if ($progressStarted) {
+    Write-Host "`nDownload complete." -ForegroundColor Green
+} else {
+    Write-Host "No download activity detected." -ForegroundColor Yellow
+}
