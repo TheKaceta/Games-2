@@ -8,8 +8,8 @@ function Draw-ProgressBar {
     $RemainingLength = $ProgressBarLength - $CompletedLength
 
     $ProgressBar = "[" + "█" * $CompletedLength + "▒" * $RemainingLength + "] $PercentComplete%"
+    Clear-Host
     Write-Host $ProgressBar -NoNewline
-    Write-Host "`r" -NoNewline # Move o cursor para o início da linha
 }
 
 $url = "https://download1325.mediafire.com/kc8aqo0nbkxgjBrF8sZOPKSJ81ezOFzCrNzWIltHMRRZDD7Gsmvx5z4V0jpiSnSupITr6IoZG5bxDJXH2Dne2kCHiuYt6umwnITGnARhQvRczWlIMPAs2aY47c1ClRBB-BdbrHuPyNtg7Rz_dHAjzQFj5zAMDIdzXsTNiznqzFxBN5M/n83ni66lrk0t74j/DATA+LINDA+V25+COM+ENB.rar"
