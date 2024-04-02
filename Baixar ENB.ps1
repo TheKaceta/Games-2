@@ -1,34 +1,71 @@
-function Show-DownloadProgress {
-    param (
-        [string]$FileUrl
-    )
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Site</title>
+    <style>
+        /* Estilos CSS podem ser adicionados aqui */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav {
+            background-color: #444;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            padding: 20px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
 
-    $WebRequest = [System.Net.WebRequest]::Create($FileUrl)
-    $WebResponse = $WebRequest.GetResponse()
-    $FileSize = $WebResponse.ContentLength
-    $ProgressBarWidth = 20
+<header>
+    <h1>Meu Site</h1>
+</header>
 
-    $WebStream = $WebResponse.GetResponseStream()
-    $FileStream = New-Object IO.FileStream ("$env:USERPROFILE\Downloads\downloaded_file.rar"), Create, Write
-    $BufferSize = 8192
-    $Buffer = New-Object byte[] $BufferSize
-    $TotalBytesRead = 0
+<nav>
+    <a href="#">Página Inicial</a>
+    <a href="#">Sobre</a>
+    <a href="#">Contato</a>
+</nav>
 
-    do {
-        $BytesRead = $WebStream.Read($Buffer, 0, $BufferSize)
-        $FileStream.Write($Buffer, 0, $BytesRead)
-        $TotalBytesRead += $BytesRead
-        $PercentComplete = [math]::Round(($TotalBytesRead / $FileSize) * 100, 2)
-        $CompletedWidth = [math]::Round(($PercentComplete / 100) * $ProgressBarWidth)
-        $RemainingWidth = $ProgressBarWidth - $CompletedWidth
-        $ProgressBar = ('█' * $CompletedWidth) + ('▒' * $RemainingWidth)
-        Write-Host "`r$ProgressBar $PercentComplete%" -NoNewline
-    } while ($BytesRead -gt 0)
+<section>
+    <h2>Bem-vindo ao Meu Site</h2>
+    <p>Este é um site de exemplo. Sinta-se à vontade para personalizá-lo conforme suas necessidades.</p>
+</section>
 
-    $WebStream.Close()
-    $FileStream.Close()
-    Write-Host "`nDownload completed!"
-}
+<footer>
+    <p>&copy; 2024 Meu Site. Todos os direitos reservados.</p>
+</footer>
 
-# Exemplo de uso
-Show-DownloadProgress -FileUrl "https://download2299.mediafire.com/e6vj2erlszqgeiP9OayZGD3yF7gMuss1IkmnJEugF5v3dwwOBcOu0vPGQugSs9JC4C0JDwWcmYtVjA5Uz2V8-abgwTq3dgsfn8X4E2CuqCIULjJqpJufP_7j0eOm9TvSeaL9LB2fIMxLiBqbpaYoud0Cm3LXUrbiVdIQbS01B0XPAg/n83ni66lrk0t74j/DATA+LINDA+V25+COM+ENB.rar"
+</body>
+</html>
